@@ -56,7 +56,7 @@ sudo chmod +x /usr/bin/usb_gadget.sh
 
 # Create a systemd service to run the script at boot
 echo "[Unit]
-Description=Setup Raspberry Pi as a USB gadget
+Description=Setup PCIe card as a USB gadget
 
 [Service]
 Type=oneshot
