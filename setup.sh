@@ -2,9 +2,12 @@
 
 # Install necessary packages
 sudo apt update
-sudo apt install -y libcomposite
 
-# Load the libcomposite module
+# Add dwc2 to /etc/modules to ensure it is loaded at boot
+echo "dwc2" | sudo tee -a /etc/modules
+
+# Load necessary kernel modules
+sudo modprobe dwc2
 sudo modprobe libcomposite
 
 # Create the usb_gadget.sh script in the /usr/bin/ directory
