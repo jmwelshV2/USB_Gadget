@@ -5,7 +5,6 @@ set -e
 
 # Updating package list and installing necessary packages
 sudo apt update
-sudo apt install -y libcomposite
 
 # Adding and loading necessary kernel modules
 echo "dwc2" | sudo tee -a /etc/modules
