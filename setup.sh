@@ -7,14 +7,14 @@ sudo apt install -y libcomposite
 # Load the libcomposite module
 sudo modprobe libcomposite
 
-# Create the rpi4_usb.sh script in the /usr/bin/ directory
-sudo bash -c 'cat > /usr/bin/rpi4_usb.sh << EOL
+# Create the usb_gadget.sh script in the /usr/bin/ directory
+sudo bash -c 'cat > /usr/bin/usb_gadget.sh << EOL
 #!/bin/bash
 
 # Create and enter the gadget directory
 cd /sys/kernel/config/usb_gadget/
-mkdir -p pi4_usb_gadget
-cd pi4_usb_gadget
+mkdir -p pcie_usb_gadget
+cd pcie_usb_gadget
 
 # Configure the USB gadget
 echo 0x1d6b > idVendor # Linux Foundation
@@ -25,9 +25,9 @@ echo 0x0200 > bcdUSB
 # Create English (US) locale
 mkdir -p strings/0x409
 
-echo "pi4_usb_gadget" > strings/0x409/serialnumber
-echo "Raspberry Pi" > strings/0x409/manufacturer
-echo "Pi4 USB Gadget" > strings/0x409/product
+echo "fedcba9876543210" > strings/0x409/serialnumber
+echo "Esoteric Technologies" > strings/0x409/manufacturer
+echo "Esoteric USB Device" > strings/0x409/product
 
 # Create configuration
 mkdir -p configs/c.1/strings/0x409
@@ -52,7 +52,7 @@ ls /sys/class/udc > UDC
 EOL'
 
 # Make the script executable
-sudo chmod +x /usr/bin/rpi4_usb.sh
+sudo chmod +x /usr/bin/usb_gadget.sh
 
 # Create a systemd service to run the script at boot
 echo "[Unit]
@@ -60,15 +60,15 @@ Description=Setup Raspberry Pi as a USB gadget
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/rpi4_usb.sh
+ExecStart=/usr/bin/usb_gadget.sh
 
 [Install]
 WantedBy=multi-user.target
-" | sudo tee /etc/systemd/system/rpi4_usb.service
+" | sudo tee /etc/systemd/system/usb_gadget.service
 
 # Start the service and enable it to run at boot
 sudo systemctl daemon-reload
-sudo systemctl enable rpi4_usb.service
+sudo systemctl enable usb_gadget.service
 
 # Now start the service to set up the gadget immediately
-sudo systemctl start rpi4_usb.service
+sudo systemctl start usb_gadget.service
