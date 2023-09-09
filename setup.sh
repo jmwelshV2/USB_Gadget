@@ -7,9 +7,9 @@ set -e
 sudo apt update
 
 # Adding and loading necessary kernel modules
-echo "dwc2" | sudo tee -a /etc/modules
+echo "dwc2_pci" | sudo tee -a /etc/modules
 if ! lsmod | grep -q "dwc2"; then
-    sudo modprobe dwc2
+    sudo modprobe dwc2_pci
 fi
 
 if ! lsmod | grep -q "libcomposite"; then
