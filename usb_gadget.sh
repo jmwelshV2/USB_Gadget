@@ -34,10 +34,17 @@ for drive in $(ls /dev/ | grep '^sd[a-z][0-9]*$'); do
         mkdir -p functions/mass_storage.$drive
         echo 1 > functions/mass_storage.$drive/stall
         echo 0 > functions/mass_storage.$drive/lun.0/removable
+        
+        # Ensure the device is not being used
+        umount /dev/$drive || true
+        fuser -k /dev/$drive || true
+        sleep 2
+
         echo /dev/$drive > functions/mass_storage.$drive/lun.0/file
         ln -s functions/mass_storage.$drive configs/c.1/
     fi
 done
+
 
 # Binding the USB gadget to the UDC driver
 ls /sys/class/udc > UDC
